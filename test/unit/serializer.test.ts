@@ -1,5 +1,5 @@
-import { USDC_MAINNET } from '../../src/constants/tokens';
 import { CurrencyAmount, Token } from '@uniswap/sdk-core';
+import { USDC_MAINNET } from '../../src/constants/tokens';
 import { QueryCurrency, QueryCurrencyAmount } from '../../src/types/index';
 import {
   getCurrency,
@@ -7,6 +7,7 @@ import {
   getQueryCurrency,
   getQueryCurrencyAmount,
 } from '../../src/serializer';
+
 const testCurrency = USDC_MAINNET;
 const testCurrencyAmount = CurrencyAmount.fromRawAmount(testCurrency, '100');
 const testQueryCurrency: QueryCurrency = {
@@ -19,6 +20,7 @@ const testQueryCurrencyAmount: QueryCurrencyAmount = {
   amount: '100',
   currency: testQueryCurrency,
 };
+
 describe('utils | safePackageName', () => {
   it('should turn query currency into currency', () => {
     const currency = getCurrency(testQueryCurrency);

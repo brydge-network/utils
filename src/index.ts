@@ -1,3 +1,3 @@
 export * from './constants';
 export * from './types';
-export * as serializer from './serializer'
+export * as serializer from './serializer';
