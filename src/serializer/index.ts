@@ -1,20 +1,17 @@
 import qs from 'qs';
-
 import { Currency, CurrencyAmount, Token } from '@uniswap/sdk-core';
 import { utils } from 'ethers';
-import { nativeOnChain } from './constants/tokens';
-import { BASE_QUERY_CURRENCY, ZERO_ADDRESS } from './constants/brydge';
-import { QueryCurrency, QueryCurrencyAmount, FeeParams } from './types/index';
+import { brydge, tokens } from '../constants';
+import { BASE_QUERY_CURRENCY } from './constants';
+import type { QueryCurrency, QueryCurrencyAmount, FeeParams } from './types';
 
-const { parseUnits } = utils;
-
-export function getCurrency(queryCurrency: QueryCurrency): Currency {
+function getCurrency(queryCurrency: QueryCurrency): Currency {
   const isNativeBool: boolean = queryCurrency.isNative === 'true';
   const chainId: number = parseInt(queryCurrency.chainId ?? '1', 10);
-  const address: string = queryCurrency.address ?? ZERO_ADDRESS;
+  const address: string = queryCurrency.address ?? brydge.ZERO_ADDRESS;
   const decimals: number = parseInt(queryCurrency.decimals ?? '18', 10);
   const currencyObj = isNativeBool
-    ? nativeOnChain(chainId)
+    ? tokens.nativeOnChain(chainId)
     : new Token(
       chainId,
       address,
@@ -25,18 +22,18 @@ export function getCurrency(queryCurrency: QueryCurrency): Currency {
   return currencyObj;
 }
 
-export function getCurrencyAmount(
+function getCurrencyAmount(
   queryCurrencyAmount: QueryCurrencyAmount,
 ): CurrencyAmount<Currency> {
   const currency = getCurrency(queryCurrencyAmount.currency);
   return CurrencyAmount.fromRawAmount(currency, queryCurrencyAmount.amount);
 }
 
-export function getQueryCurrency(
+function getQueryCurrency(
   currency: Currency | null | undefined,
 ): QueryCurrency {
   const feeQueryCurrency = currency?.isNative
-    ? nativeOnChain(currency.chainId)
+    ? tokens.nativeOnChain(currency.chainId)
     : currency
       ? new Token(currency?.chainId, currency?.address, currency?.decimals)
       : undefined;
@@ -53,7 +50,25 @@ export function getQueryCurrency(
   return finalCurrency;
 }
 
-export default function createFeeQuery(
+function getQueryCurrencyAmount(
+  currencyAmount: CurrencyAmount<Currency> | undefined,
+): QueryCurrencyAmount {
+  const amount = currencyAmount
+    ? utils.parseUnits(
+      currencyAmount.toFixed(),
+      currencyAmount.currency.decimals,
+    ).toString()
+    : '0';
+  const currency = currencyAmount
+    ? getQueryCurrency(currencyAmount.currency)
+    : BASE_QUERY_CURRENCY;
+  return {
+    amount,
+    currency,
+  };
+}
+
+function createFeeQuery(
   paramAmount: CurrencyAmount<Currency> | undefined,
   paramCurrency: Currency | null | undefined,
   sourceChainId: number,
@@ -63,7 +78,7 @@ export default function createFeeQuery(
 ): string {
   const finalCurrency = getQueryCurrency(paramCurrency);
   const amountAsString = paramAmount
-    ? parseUnits(
+    ? utils.parseUnits(
       paramAmount.toFixed(),
       paramAmount.currency.decimals,
     ).toString()
@@ -80,20 +95,16 @@ export default function createFeeQuery(
   return queryString;
 }
 
-export function getQueryCurrencyAmount(
-  currencyAmount: CurrencyAmount<Currency> | undefined,
-): QueryCurrencyAmount {
-  const amount = currencyAmount
-    ? parseUnits(
-      currencyAmount.toFixed(),
-      currencyAmount.currency.decimals,
-    ).toString()
-    : '0';
-  const currency = currencyAmount
-    ? getQueryCurrency(currencyAmount.currency)
-    : BASE_QUERY_CURRENCY;
-  return {
-    amount,
-    currency,
-  };
-}
+export {
+  getCurrency,
+  getCurrencyAmount,
+  getQueryCurrency,
+  getQueryCurrencyAmount,
+  createFeeQuery,
+};
+
+export type {
+  QueryCurrency,
+  QueryCurrencyAmount,
+  FeeParams,
+};

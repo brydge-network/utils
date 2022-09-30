@@ -1,6 +1,6 @@
 import { CurrencyAmount, Token } from '@uniswap/sdk-core';
 import { USDC_MAINNET } from '../../src/constants/tokens';
-import { QueryCurrency, QueryCurrencyAmount } from '../../src/types/index';
+import { QueryCurrency, QueryCurrencyAmount } from '../../src/serializer/types';
 import {
   getCurrency,
   getCurrencyAmount,
@@ -26,15 +26,15 @@ describe('utils | safePackageName', () => {
     const currency = getCurrency(testQueryCurrency);
     expect(currency).toBeInstanceOf(Token);
   });
-  it('should turn query currencyamount into currencyamount', () => {
+  it('should turn query currencyAmount into currencyAmount', () => {
     const currencyAmount = getCurrencyAmount(testQueryCurrencyAmount);
     console.log(currencyAmount);
   });
-  it('should turn currency into querycurrency', () => {
+  it('should turn currency into queryCurrency', () => {
     const queryCurrency = getQueryCurrency(testCurrency);
     console.log(queryCurrency);
   });
-  it('should turn currencyamount into query currencyamount', () => {
+  it('should turn currencyAmount into query currencyAmount', () => {
     const queryCurrencyAmount = getQueryCurrencyAmount(testCurrencyAmount);
     console.log(queryCurrencyAmount);
   });

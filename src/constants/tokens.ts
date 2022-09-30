@@ -1,12 +1,7 @@
 import {
-  Currency,
-  Ether,
-  NativeCurrency,
-  Token,
-  WETH9,
+  Currency, Ether, NativeCurrency, Token, WETH9,
 } from '@uniswap/sdk-core';
 import invariant from 'tiny-invariant';
-
 import { SupportedChainId } from './chains';
 
 export const MATIC_NATIVE_ADDRESS = '0x0000000000000000000000000000000000001010';
@@ -426,6 +421,7 @@ export class ExtendedEther extends Ether {
 }
 
 const cachedNativeCurrency: { [chainId: number]: NativeCurrency } = {};
+
 export function nativeOnChain(chainId: number): NativeCurrency {
   return (
     cachedNativeCurrency[chainId]
