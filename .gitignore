@@ -10,3 +10,5 @@ dist
 
 .env
 .parcel-cache
+.vscode
+parcel-bundle-reports

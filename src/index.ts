@@ -1,4 +1,15 @@
 import * as constants from './constants';
 import * as serializer from './serializer';
 
-export { serializer, constants };
+import type { FeeParams, QueryCurrency, QueryCurrencyAmount } from './serializer';
+
+export type {
+  FeeParams,
+  QueryCurrency,
+  QueryCurrencyAmount,
+};
+
+export {
+  serializer,
+  constants,
+};
