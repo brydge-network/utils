@@ -1,5 +1,5 @@
-import * as brydge from './brydge';
-import * as chains from './chains';
-import * as tokens from './tokens';
+export * from './brydge';
+export * from './chains';
+export * from './tokens';
 
-export { brydge, chains, tokens };
+// export { brydge, chains, tokens };
