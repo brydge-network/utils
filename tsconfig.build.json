@@ -9,7 +9,7 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "target": "esnext",
+    "target": "ES5",
     "isolatedModules": true,
     "module": "commonjs",
     "outDir": "dist",

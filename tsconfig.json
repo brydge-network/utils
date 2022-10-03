@@ -12,7 +12,6 @@
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
-    "target": "ES6",
     "isolatedModules": true
   }
 }
