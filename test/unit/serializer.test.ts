@@ -1,11 +1,12 @@
 import { CurrencyAmount, Token } from '@uniswap/sdk-core';
 import { USDC_MAINNET } from '../../src/constants/tokens';
-import { QueryCurrency, QueryCurrencyAmount } from '../../src/serializer/types';
 import {
   getCurrency,
   getCurrencyAmount,
   getQueryCurrency,
   getQueryCurrencyAmount,
+  QueryCurrency,
+  QueryCurrencyAmount,
 } from '../../src/serializer';
 
 const testCurrency = USDC_MAINNET;
