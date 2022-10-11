@@ -1,7 +1,7 @@
 import { ICall } from '../../src/iFrameSerializer';
 import { createUrl } from '../../src/iFrameSerializer';
 
-const iCalls = [
+const iCalls: ICall[] = [
   {
     _to: '0x0000000000000000000000000000000000000000',
     _value: '0',
