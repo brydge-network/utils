@@ -27,7 +27,6 @@ describe('utils | safePackageName', () => {
       1,
       iCalls
     );
-    expect(url).toBeInstanceOf(String);
     expect(url.split('-').length).toBe(2);
     expect(url.split('-')[0].split('+').length).toBe(5);
     expect(url.split('-')[1].split(',').length).toBe(2);

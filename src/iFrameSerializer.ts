@@ -22,5 +22,7 @@ export function createUrl(
     path += `${ICall._to}+${ICall._value}+${ICall._calldata},`;
   }
 
+  path = path.slice(0, -1);
+
   return path;
 }
