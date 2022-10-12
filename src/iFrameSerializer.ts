@@ -1,22 +1,54 @@
+import Ajv from 'ajv';
+
 export type ICall = {
   _to: string;
   _value: any;
   _calldata: string;
 };
+interface BrydgeWidgetParams {
+  darkMode: boolean;
+  isERC20Mode: boolean;
+  outputTokenAddress: string;
+  destinationChainId: number;
+  title: string;
+  price: number;
+  iCalls: ICall[];
+}
 
-type WidgetParams =
-  | {
-      darkMode: boolean;
-      isERC20Mode: boolean;
-      outputTokenAddress: string;
-      destinationChainId: number;
-      title: string;
-      price: number;
-      iCalls: ICall[];
-    }
-  | {
-      error: string;
-    };
+const schema = {
+  type: 'object',
+  properties: {
+    darkMode: { type: 'boolean' },
+    isERC20Mode: { type: 'boolean' },
+    outputTokenAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$' },
+    destinationChainId: { type: 'number', minimum: 1, maximum: 100000 },
+    title: { type: 'string' },
+    price: { type: 'number' },
+    iCalls: {
+      type: 'array',
+      items: {
+        type: 'object',
+        properties: {
+          _to: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$' },
+          _value: { type: 'number' },
+          _calldata: { type: 'string' },
+        },
+        required: ['_to', '_value', '_calldata'],
+      },
+    },
+  },
+  required: [
+    'darkMode',
+    'isERC20Mode',
+    'outputTokenAddress',
+    'destinationChainId',
+    'title',
+    'price',
+    'iCalls',
+  ],
+};
+
+const ajv = new Ajv();
 
 export function encodeUrl(
   darkMode: boolean,
@@ -27,73 +59,35 @@ export function encodeUrl(
   price: number,
   iCalls: ICall[]
 ): string {
-  const mode = (darkMode ? '1' : '0') + (isERC20Mode ? '1' : '0');
-  let path = `${mode}+${outputTokenAddress}+${destinationChainId}+${title.replaceAll(
-    ' ',
-    '%20'
-  )}+${price}-`;
-
-  iCalls.forEach((iCall, index) => {
-    path += `${iCall._to}+${iCall._value}+${iCall._calldata}`;
-    if (index !== iCalls.length - 1) {
-      path += ',';
-    }
-  });
-
-  return path;
-}
-
-export function decodeUrl(path: string): WidgetParams {
-  if (
-    path.split('-').length !== 2 ||
-    path.split('-')[0].split('+').length !== 5
-  ) {
-    return {
-      error:
-        'Needs to be in the format of mode+outputTokenAddress+destinationChainId+title+price-iCalls',
-    };
-  }
-  const [
-    mode,
+  const widgetParams: BrydgeWidgetParams = {
+    darkMode,
+    isERC20Mode,
     outputTokenAddress,
     destinationChainId,
     title,
     price,
-  ] = path.split('-')[0].split('+');
-  const iCalls = path.split('-')[1];
-
-  if (mode.length !== 2) {
-    return { error: 'Modes are malformed.' };
-  }
-  const darkMode = mode[0] === '1';
-  const isERC20Mode = mode[1] === '1';
-
-  const iCallsArray = iCalls.split(',').map((iCall) => {
-    if (iCall.split('+').length !== 3) {
-      return null as any;
-    }
-    const [to, value, calldata] = iCall.split('+');
-    const iCallObject: ICall = {
-      _to: to,
-      _value: value,
-      _calldata: calldata,
-    };
-    return iCallObject;
-  });
-
-  if (iCallsArray.includes(null)) {
-    return { error: 'ICalls are malformed.' };
-  }
-
-  const params: WidgetParams = {
-    darkMode,
-    isERC20Mode,
-    outputTokenAddress,
-    destinationChainId: parseInt(destinationChainId, 10),
-    title,
-    price: parseInt(price, 10),
-    iCalls: iCallsArray,
+    iCalls,
   };
+  const valid = ajv.validate(schema, widgetParams);
+  if (valid) {
+    return JSON.stringify(widgetParams);
+  } else {
+    throw new Error(ajv.errorsText());
+  }
+}
 
-  return params;
+export function decodeUrl(
+  path: string
+): BrydgeWidgetParams | { error: string } {
+  try {
+    const widgetParams = JSON.parse(path);
+    const valid = ajv.validate(schema, widgetParams);
+    if (valid) {
+      return widgetParams;
+    } else {
+      return { error: ajv.errorsText() };
+    }
+  } catch (e) {
+    return { error: 'Malformed url.' };
+  }
 }
