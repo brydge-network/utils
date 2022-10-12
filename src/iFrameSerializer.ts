@@ -5,6 +5,7 @@ export type ICall = {
   _value: any;
   _calldata: string;
 };
+
 interface BrydgeWidgetParams {
   darkMode: boolean;
   isERC20Mode: boolean;
@@ -57,7 +58,7 @@ export function encodeUrl(
   destinationChainId: number,
   title: string,
   price: number,
-  iCalls: ICall[]
+  iCalls: ICall[],
 ): string {
   const widgetParams: BrydgeWidgetParams = {
     darkMode,
@@ -71,22 +72,20 @@ export function encodeUrl(
   const valid = ajv.validate(schema, widgetParams);
   if (valid) {
     return JSON.stringify(widgetParams);
-  } else {
-    throw new Error(ajv.errorsText());
   }
+  throw new Error(ajv.errorsText());
 }
 
 export function decodeUrl(
-  path: string
+  path: string,
 ): BrydgeWidgetParams | { error: string } {
   try {
     const widgetParams = JSON.parse(path);
     const valid = ajv.validate(schema, widgetParams);
     if (valid) {
       return widgetParams;
-    } else {
-      return { error: ajv.errorsText() };
     }
+    return { error: ajv.errorsText() };
   } catch (e) {
     return { error: 'Malformed url.' };
   }

@@ -1,5 +1,4 @@
-import { ICall } from '../../src/iFrameSerializer';
-import { encodeUrl, decodeUrl } from '../../src/iFrameSerializer';
+import { ICall, encodeUrl, decodeUrl } from '../../src/iFrameSerializer';
 
 const darkMode = true;
 const isERC20Mode = true;
@@ -32,7 +31,7 @@ describe('utils | safePackageName', () => {
       destinationChainId,
       title,
       price,
-      iCalls
+      iCalls,
     );
     const urlObject = JSON.parse(url);
     expect(urlObject.darkMode).toEqual(darkMode);
