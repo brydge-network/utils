@@ -42,14 +42,18 @@ describe('utils | safePackageName', () => {
 
     // Testing the decodeUrl function
     const decodedUrl = decodeUrl(url);
-    expect(decodedUrl?.error).toBe(undefined);
-    expect(decodedUrl?.darkMode).toBe(darkMode);
-    expect(decodedUrl?.isERC20Mode).toBe(isERC20Mode);
-    expect(decodedUrl?.outputTokenAddress).toBe(outputTokenAddress);
-    expect(decodedUrl?.destinationChainId).toBe(destinationChainId);
-    expect(decodedUrl?.title).toBe(title);
-    expect(decodedUrl?.price).toBe(price);
-    expect(decodedUrl?.iCalls).toEqual(iCalls);
+    expect('error' in decodedUrl).toBe(false);
+    if ('error' in decodedUrl) {
+      expect(true).toBe(false); // Fail
+    } else {
+      expect(decodedUrl?.darkMode).toBe(darkMode);
+      expect(decodedUrl?.isERC20Mode).toBe(isERC20Mode);
+      expect(decodedUrl?.outputTokenAddress).toBe(outputTokenAddress);
+      expect(decodedUrl?.destinationChainId).toBe(destinationChainId);
+      expect(decodedUrl?.title).toBe(title);
+      expect(decodedUrl?.price).toBe(price);
+      expect(decodedUrl?.iCalls).toEqual(iCalls);
+    }
   });
 
   it('should return appropriate error messages when provided a malformed url', () => {
@@ -60,34 +64,74 @@ describe('utils | safePackageName', () => {
 
     // case 1: too many chunks (hyphens) (should be 2)
     let error1 = url + '-';
-    expect(decodeUrl(error1)?.error).toBe(formatMessage);
+    let test1 = decodeUrl(error1);
+    if ('error' in test1) {
+      expect(test1.error).toBe(formatMessage);
+    } else {
+      expect(true).toBe(false); // Fail
+    }
 
     // case 2: too few chunks (hyphens) (should be 2)
     let error2 = url.split('-')[0];
-    expect(decodeUrl(error2)?.error).toBe(formatMessage);
+    let test2 = decodeUrl(error2);
+    if ('error' in test2) {
+      expect(test2.error).toBe(formatMessage);
+    } else {
+      expect(true).toBe(false); // Fail
+    }
 
     // case 3: too many params (plus signs) (should be 5)
     let error3 = url.split('-')[0] + '+0-' + url.split('-')[1];
-    expect(decodeUrl(error3)?.error).toBe(formatMessage);
+    let test3 = decodeUrl(error3);
+    if ('error' in test3) {
+      expect(test3.error).toBe(formatMessage);
+    } else {
+      expect(true).toBe(false); // Fail
+    }
 
     // case 4: too few params (plus signs) (should be 5)
     let error4 = url.split('-')[0].split('+')[0] + '-' + url.split('-')[1];
-    expect(decodeUrl(error4)?.error).toBe(formatMessage);
+    let test4 = decodeUrl(error4);
+    if ('error' in test4) {
+      expect(test4.error).toBe(formatMessage);
+    } else {
+      expect(true).toBe(false); // Fail
+    }
 
     // case 5: too many mode characters (should be 2)
     let error5 = '0' + url;
-    expect(decodeUrl(error5)?.error).toBe('Modes are malformed.');
+    let test5 = decodeUrl(error5);
+    if ('error' in test5) {
+      expect(test5.error).toBe('Modes are malformed.');
+    } else {
+      expect(true).toBe(false); // Fail
+    }
 
     // case 6: too few mode characters (should be 2)
     let error6 = url.slice(1);
-    expect(decodeUrl(error6)?.error).toBe('Modes are malformed.');
+    let test6 = decodeUrl(error6);
+    if ('error' in test6) {
+      expect(test6.error).toBe('Modes are malformed.');
+    } else {
+      expect(true).toBe(false); // Fail
+    }
 
     // case 7: too many iCall params (plus signs) (should be 3)
     let error7 = url + '+0';
-    expect(decodeUrl(error7)?.error).toBe('ICalls are malformed.');
+    let test7 = decodeUrl(error7);
+    if ('error' in test7) {
+      expect(test7.error).toBe('ICalls are malformed.');
+    } else {
+      expect(true).toBe(false); // Fail
+    }
 
     // case 8: too few iCall params (plus signs) (should be 3)
     let error8 = url.slice(0, -2);
-    expect(decodeUrl(error8)?.error).toBe('ICalls are malformed.');
+    let test8 = decodeUrl(error8);
+    if ('error' in test8) {
+      expect(test8.error).toBe('ICalls are malformed.');
+    } else {
+      expect(true).toBe(false); // Fail
+    }
   });
 });

@@ -4,6 +4,20 @@ export type ICall = {
   _calldata: string;
 };
 
+type widgetParams =
+  | {
+      darkMode: boolean;
+      isERC20Mode: boolean;
+      outputTokenAddress: string;
+      destinationChainId: number;
+      title: string;
+      price: number;
+      iCalls: ICall[];
+    }
+  | {
+      error: string;
+    };
+
 export function encodeUrl(
   darkMode: boolean,
   isERC20Mode: boolean,
@@ -12,7 +26,7 @@ export function encodeUrl(
   title: string,
   price: number,
   iCalls: ICall[]
-) {
+): string {
   const mode = (darkMode ? '1' : '0') + (isERC20Mode ? '1' : '0');
   let path = `${mode}+${outputTokenAddress}+${destinationChainId}+${title.replaceAll(
     ' ',
@@ -27,7 +41,7 @@ export function encodeUrl(
   return path;
 }
 
-export function decodeUrl(path: string) {
+export function decodeUrl(path: string): widgetParams {
   if (
     path.split('-').length != 2 ||
     path.split('-')[0].split('+').length != 5
@@ -54,21 +68,22 @@ export function decodeUrl(path: string) {
 
   const iCallsArray = iCalls.split(',').map((iCall) => {
     if (iCall.split('+').length != 3) {
-      return null;
+      return null as any;
     }
     const [_to, _value, _calldata] = iCall.split('+');
-    return {
+    const iCallObject: ICall = {
       _to,
       _value,
       _calldata,
     };
+    return iCallObject;
   });
 
   if (iCallsArray.includes(null)) {
     return { error: 'ICalls are malformed.' };
   }
 
-  return {
+  const params: widgetParams = {
     darkMode,
     isERC20Mode,
     outputTokenAddress,
@@ -77,4 +92,6 @@ export function decodeUrl(path: string) {
     price: parseInt(price),
     iCalls: iCallsArray,
   };
+
+  return params;
 }
