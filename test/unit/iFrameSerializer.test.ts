@@ -10,30 +10,20 @@ const iCalls: ICall[] = [
   {
     _to: '0x0000000000000000000000000000000000000000',
     _value: 0,
-    _calldata:
-      '0x0000000000000000000000000000000000000000000000000000000000000000',
+    _calldata: '0x0000000000000000000000000000000000000000000000000000000000000000',
   },
   {
     _to: '0x0000000000000000000000000000000000000000',
     _value: 0,
-    _calldata:
-      '0x0000000000000000000000000000000000000000000000000000000000000000',
+    _calldata: '0x0000000000000000000000000000000000000000000000000000000000000000',
   },
 ];
 
 describe('utils | safePackageName', () => {
   it('should encode url params and decode them back into the same params', () => {
     // Testing the encodeUrl function
-    const url = encodeUrl(
-      darkMode,
-      isERC20Mode,
-      outputTokenAddress,
-      destinationChainId,
-      title,
-      price,
-      iCalls,
-    );
-    const urlObject = JSON.parse(url);
+    const url = encodeUrl(darkMode, isERC20Mode, outputTokenAddress, destinationChainId, title, price, iCalls);
+    const urlObject = JSON.parse(decodeURIComponent(url));
     expect(urlObject.darkMode).toEqual(darkMode);
     expect(urlObject.isERC20Mode).toEqual(isERC20Mode);
     expect(urlObject.outputTokenAddress).toEqual(outputTokenAddress);

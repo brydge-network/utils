@@ -63,14 +63,14 @@ export function encodeUrl(
   };
   const valid = ajv.validate(schema, widgetParams);
   if (valid) {
-    return JSON.stringify(widgetParams);
+    return encodeURIComponent(JSON.stringify(widgetParams));
   }
   throw new Error(ajv.errorsText());
 }
 
 export function decodeUrl(path: string): BrydgeWidgetParams | { error: string } {
   try {
-    const widgetParams = JSON.parse(path);
+    const widgetParams = JSON.parse(decodeURIComponent(path));
     const valid = ajv.validate(schema, widgetParams);
     if (valid) {
       return widgetParams;
