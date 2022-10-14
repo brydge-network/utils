@@ -21,7 +21,7 @@ const schema = {
   properties: {
     darkMode: { type: 'boolean' },
     isERC20Mode: { type: 'boolean' },
-    outputTokenAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$' },
+    outputTokenAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$|NATIVE' },
     destinationChainId: { type: 'number', minimum: 1, maximum: 100000 },
     title: { type: 'string' },
     price: { type: 'number' },
@@ -38,15 +38,7 @@ const schema = {
       },
     },
   },
-  required: [
-    'darkMode',
-    'isERC20Mode',
-    'outputTokenAddress',
-    'destinationChainId',
-    'title',
-    'price',
-    'iCalls',
-  ],
+  required: ['darkMode', 'isERC20Mode', 'outputTokenAddress', 'destinationChainId', 'title', 'price', 'iCalls'],
 };
 
 const ajv = new Ajv();
@@ -76,9 +68,7 @@ export function encodeUrl(
   throw new Error(ajv.errorsText());
 }
 
-export function decodeUrl(
-  path: string,
-): BrydgeWidgetParams | { error: string } {
+export function decodeUrl(path: string): BrydgeWidgetParams | { error: string } {
   try {
     const widgetParams = JSON.parse(path);
     const valid = ajv.validate(schema, widgetParams);
