@@ -31,7 +31,7 @@ const schema = {
         type: 'object',
         properties: {
           _to: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$' },
-          _value: { type: 'number' },
+          _value: {},
           _calldata: { type: 'string' },
         },
         required: ['_to', '_value', '_calldata'],
