@@ -1,4 +1,4 @@
-import tokensMapJSON from './constants/tokensMap.json';
+import tokensMapJSON from './constants/brydgeTokensMap.json';
 
 interface ChainTokenMap {
   [key: number]: TokenMap;
