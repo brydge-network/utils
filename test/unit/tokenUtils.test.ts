@@ -1,4 +1,5 @@
 import { assert } from 'console';
+import { AVAX_NATIVE_ADDRESS, MATIC_NATIVE_ADDRESS } from '../../src';
 import { getTokenDecimals, getTokenInfo, isNativeToken } from '../../src/tokenUtils';
 
 describe('utils | tokenUtils', () => {
@@ -36,6 +37,16 @@ describe('utils | tokenUtils', () => {
     assert(isNative2 === true);
     assert(isNative3 === true);
     assert(isNative4 === true);
+  });
+
+  it('should be Native MATIC', () => {
+    const isNative = isNativeToken(MATIC_NATIVE_ADDRESS, 137);
+    assert(isNative === true);
+  });
+
+  it('should be Native AVAX', () => {
+    const isNative = isNativeToken(AVAX_NATIVE_ADDRESS, 43114);
+    assert(isNative === true);
   });
 
   it('should getTokenDecimals native', () => {

@@ -1,10 +1,10 @@
-import {
-  Currency, Ether, NativeCurrency, Token, WETH9,
-} from '@uniswap/sdk-core';
+import { Currency, Ether, NativeCurrency, Token, WETH9 } from '@uniswap/sdk-core';
 import invariant from 'tiny-invariant';
 import { SupportedChainId } from './chains';
 
 export const MATIC_NATIVE_ADDRESS = '0x0000000000000000000000000000000000001010';
+export const AVAX_NATIVE_ADDRESS = '0x85e7a3697850d36164629b920cda5e414659b3bf';
+
 export type TokenMap = {
   [chainId: number]: Token;
 };
@@ -376,13 +376,8 @@ export const WRAPPED_NATIVE_CURRENCY: { [chainId: number]: Token | undefined } =
   ),
 };
 
-function isMatic(
-  chainId: number,
-): chainId is SupportedChainId.POLYGON | SupportedChainId.POLYGON_MUMBAI {
-  return (
-    chainId === SupportedChainId.POLYGON_MUMBAI
-    || chainId === SupportedChainId.POLYGON
-  );
+function isMatic(chainId: number): chainId is SupportedChainId.POLYGON | SupportedChainId.POLYGON_MUMBAI {
+  return chainId === SupportedChainId.POLYGON_MUMBAI || chainId === SupportedChainId.POLYGON;
 }
 
 class MaticNativeCurrency extends NativeCurrency {
@@ -413,10 +408,7 @@ export class ExtendedEther extends Ether {
   private static _cachedExtendedEther: { [chainId: number]: NativeCurrency } = {};
 
   public static onChain(chainId: number): ExtendedEther {
-    return (
-      this._cachedExtendedEther[chainId]
-      ?? (this._cachedExtendedEther[chainId] = new ExtendedEther(chainId))
-    );
+    return this._cachedExtendedEther[chainId] ?? (this._cachedExtendedEther[chainId] = new ExtendedEther(chainId));
   }
 }
 
@@ -424,8 +416,8 @@ const cachedNativeCurrency: { [chainId: number]: NativeCurrency } = {};
 
 export function nativeOnChain(chainId: number): NativeCurrency {
   return (
-    cachedNativeCurrency[chainId]
-    ?? (cachedNativeCurrency[chainId] = isMatic(chainId)
+    cachedNativeCurrency[chainId] ??
+    (cachedNativeCurrency[chainId] = isMatic(chainId)
       ? new MaticNativeCurrency(chainId)
       : ExtendedEther.onChain(chainId))
   );
