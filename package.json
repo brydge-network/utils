@@ -1,6 +1,6 @@
 {
   "name": "@brydge-network/utils",
-  "version": "0.0.22",
+  "version": "0.0.24",
   "files": [
     "dist"
   ],
@@ -11,7 +11,8 @@
     "build": "yarn clean && tsc -p tsconfig.build.json",
     "test": "jest",
     "lint": "eslint . --ext .ts,.tsx --fix",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "build-map": "npx ts-node src/helpers/buildMap.ts > src/constants/brydgeTokensMap.json"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
@@ -36,12 +37,14 @@
     "typescript": "^4.8.4"
   },
   "dependencies": {
+    "@brydge-network/token-list": "^1.5.3",
     "@uniswap/sdk-core": "^3.1.0",
     "@uniswap/smart-order-router": "^2.10.0",
     "ajv": "^8.8.2",
     "ethers": "^5.7.1",
     "qs": "^6.11.0",
-    "tiny-invariant": "^1.3.1"
+    "tiny-invariant": "^1.3.1",
+    "typescript-map": "0.1.0"
   },
   "packageManager": "yarn@3.2.3",
   "publishConfig": {

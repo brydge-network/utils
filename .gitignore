@@ -12,3 +12,5 @@ dist
 .parcel-cache
 .vscode
 parcel-bundle-reports
+.yalc
+yalc.lock
