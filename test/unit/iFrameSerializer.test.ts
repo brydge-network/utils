@@ -22,7 +22,7 @@ const iCalls: ICall[] = [
 describe('utils | safePackageName', () => {
   it('should encode url params and decode them back into the same params', () => {
     // Testing the encodeUrl function
-    const url = encodeUrl(darkMode, isERC20Mode, outputTokenAddress, destinationChainId, title, price, iCalls);
+    const url = encodeUrl({ darkMode, isERC20Mode, outputTokenAddress, destinationChainId, title, price, iCalls });
     const urlObject = JSON.parse(decodeURIComponent(url));
     expect(urlObject.darkMode).toEqual(darkMode);
     expect(urlObject.isERC20Mode).toEqual(isERC20Mode);
