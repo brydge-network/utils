@@ -19,5 +19,7 @@ module.exports = {
   output: {
     filename: 'iFrameBundle.js',
     path: path.resolve(__dirname, 'dist'),
+    libraryTarget: 'var',
+    library: 'Serializer',
   },
 };
