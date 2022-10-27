@@ -1,6 +1,6 @@
 import { assert } from 'console';
 import { AVAX_NATIVE_ADDRESS, MATIC_NATIVE_ADDRESS } from '../../src';
-import { getTokenDecimals, getTokenInfo, isNativeToken } from '../../src/tokenUtils';
+import { getTokenDecimals, getTokenInfo, isNativeAddress } from '../../src/tokenUtils';
 
 describe('utils | tokenUtils', () => {
   it('should get USDT on Ethereum', () => {
@@ -24,15 +24,15 @@ describe('utils | tokenUtils', () => {
   });
 
   it('should not be Native token', () => {
-    const isNative = isNativeToken('0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8');
+    const isNative = isNativeAddress('0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8');
     assert(isNative === false);
   });
 
   it('should be Native token', () => {
-    const isNative1 = isNativeToken('Native');
-    const isNative2 = isNativeToken('NATIVE');
-    const isNative3 = isNativeToken('native');
-    const isNative4 = isNativeToken('NaTiVe');
+    const isNative1 = isNativeAddress('Native');
+    const isNative2 = isNativeAddress('NATIVE');
+    const isNative3 = isNativeAddress('native');
+    const isNative4 = isNativeAddress('NaTiVe');
     assert(isNative1 === true);
     assert(isNative2 === true);
     assert(isNative3 === true);
@@ -40,12 +40,12 @@ describe('utils | tokenUtils', () => {
   });
 
   it('should be Native MATIC', () => {
-    const isNative = isNativeToken(MATIC_NATIVE_ADDRESS, 137);
+    const isNative = isNativeAddress(MATIC_NATIVE_ADDRESS, 137);
     assert(isNative === true);
   });
 
   it('should be Native AVAX', () => {
-    const isNative = isNativeToken(AVAX_NATIVE_ADDRESS, 43114);
+    const isNative = isNativeAddress(AVAX_NATIVE_ADDRESS, 43114);
     assert(isNative === true);
   });
 
@@ -60,7 +60,7 @@ describe('utils | tokenUtils', () => {
   });
 
   it('should getTokenDecimals LINK Arbitrum', () => {
-    const decimals = getTokenDecimals(42161, '0xf97f4df75117a78c1A5a0DBb814Af92458539FB4');
+    const decimals = getTokenDecimals(137, '0xc2132D05D31c914a87C6611C10748AEb04B58e8F');
     assert(decimals === 18);
   });
 });
