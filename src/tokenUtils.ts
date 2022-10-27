@@ -36,11 +36,11 @@ export function getTokenInfo(chainId: number, tokenAddress: string): Token {
  * 3. 0xEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE
  * 4. Native token address is called (must pass in optional chainId argument)
  */
-export function isNativeToken(tokenAddress: string, chainId?: number): boolean {
+export function isNativeAddress(tokenAddress: string, chainId?: number): boolean {
   if (
-    NATIVE_STRING.localeCompare(tokenAddress, undefined, { sensitivity: 'base' }) === 0 ||
-    NATIVE_ADDRESS1 === tokenAddress ||
-    NATIVE_ADDRESS2 === tokenAddress
+    NATIVE_STRING.localeCompare(tokenAddress, undefined, { sensitivity: 'base' }) === 0
+    || NATIVE_ADDRESS1 === tokenAddress
+    || NATIVE_ADDRESS2 === tokenAddress
   ) {
     return true;
   }
@@ -59,7 +59,7 @@ export function isNativeToken(tokenAddress: string, chainId?: number): boolean {
 }
 
 export function getTokenDecimals(chainId: number, tokenAddress: string): number {
-  if (isNativeToken(tokenAddress)) {
+  if (isNativeAddress(tokenAddress)) {
     return 18;
   }
   invariant(isAddress(tokenAddress), 'Invalid token address');

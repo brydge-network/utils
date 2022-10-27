@@ -1,4 +1,6 @@
-import { Currency, Ether, NativeCurrency, Token, WETH9 } from '@uniswap/sdk-core';
+import {
+  Currency, Ether, NativeCurrency, Token, WETH9,
+} from '@uniswap/sdk-core';
 import invariant from 'tiny-invariant';
 import { SupportedChainId } from './chains';
 
@@ -416,18 +418,11 @@ const cachedNativeCurrency: { [chainId: number]: NativeCurrency } = {};
 
 export function nativeOnChain(chainId: number): NativeCurrency {
   return (
-    cachedNativeCurrency[chainId] ??
-    (cachedNativeCurrency[chainId] = isMatic(chainId)
+    cachedNativeCurrency[chainId]
+    ?? (cachedNativeCurrency[chainId] = isMatic(chainId)
       ? new MaticNativeCurrency(chainId)
       : ExtendedEther.onChain(chainId))
   );
-}
-
-export function isNativeAddress(address: string, chainId: number): boolean {
-  if (address === 'NATIVE') return true;
-  if (chainId === SupportedChainId.POLYGON && address === MATIC_NATIVE_ADDRESS) return true;
-  // add more chain/native currency address checks here
-  return false;
 }
 
 export const TOKEN_SHORTHANDS: {
