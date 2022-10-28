@@ -29,14 +29,14 @@ describe('utils | safePackageName', () => {
   });
   it('should turn query currencyAmount into currencyAmount', () => {
     const currencyAmount = getCurrencyAmount(testQueryCurrencyAmount);
-    console.log(currencyAmount);
+    // console.log(currencyAmount);
   });
   it('should turn currency into queryCurrency', () => {
     const queryCurrency = getQueryCurrency(testCurrency);
-    console.log(queryCurrency);
+    // console.log(queryCurrency);
   });
   it('should turn currencyAmount into query currencyAmount', () => {
     const queryCurrencyAmount = getQueryCurrencyAmount(testCurrencyAmount);
-    console.log(queryCurrencyAmount);
+    // console.log(queryCurrencyAmount);
   });
 });
