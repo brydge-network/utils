@@ -59,7 +59,7 @@ export function isNativeAddress(tokenAddress: string, chainId?: number): boolean
 }
 
 export function getTokenDecimals(chainId: number, tokenAddress: string): number {
-  if (isNativeAddress(tokenAddress)) {
+  if (isNativeAddress(tokenAddress, chainId)) {
     return 18;
   }
   invariant(isAddress(tokenAddress), 'Invalid token address');

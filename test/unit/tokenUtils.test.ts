@@ -63,4 +63,9 @@ describe('utils | tokenUtils', () => {
     const decimals = getTokenDecimals(137, '0xc2132D05D31c914a87C6611C10748AEb04B58e8F');
     assert(decimals === 18);
   });
+
+  it('should getTokenDecimals MATIC Polygon', () => {
+    const decimals = getTokenDecimals(137, '0x0000000000000000000000000000000000001010');
+    assert(decimals === 18);
+  });
 });
