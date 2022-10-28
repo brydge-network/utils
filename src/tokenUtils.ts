@@ -1,6 +1,7 @@
+import { NativeCurrency } from '@uniswap/sdk-core';
 import { isAddress } from 'ethers/lib/utils';
 import invariant from 'tiny-invariant';
-import { AVAX_NATIVE_ADDRESS, MATIC_NATIVE_ADDRESS } from './constants';
+import { AVAX_NATIVE_ADDRESS, MATIC_NATIVE_ADDRESS, nativeOnChain } from './constants';
 import tokensMapJSON from './constants/brydgeTokensMap.json';
 
 interface ChainTokenMap {
@@ -23,11 +24,6 @@ interface Token {
 const NATIVE_STRING = 'NATIVE';
 const NATIVE_ADDRESS1 = '0x0000000000000000000000000000000000000000';
 const NATIVE_ADDRESS2 = '0xEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEEE';
-
-export function getTokenInfo(chainId: number, tokenAddress: string): Token {
-  invariant(isAddress(tokenAddress), 'Invalid token address');
-  return (tokensMapJSON as ChainTokenMap)[chainId][tokenAddress];
-}
 
 /*
  * Returns true if the tokenAddress is one of the following:
@@ -56,6 +52,19 @@ export function isNativeAddress(tokenAddress: string, chainId?: number): boolean
     return true;
   }
   return false;
+}
+
+export function getTokenInfo(chainId: number, tokenAddress: string): Token {
+  invariant(isAddress(tokenAddress), 'Invalid token address');
+  return (tokensMapJSON as ChainTokenMap)[chainId][tokenAddress];
+}
+
+export function getCurrencyObject(chainId: number, tokenAddress: string): NativeCurrency | Token {
+  if (isNativeAddress(tokenAddress, chainId)) {
+    return nativeOnChain(chainId);
+  }
+  invariant(isAddress(tokenAddress), 'Invalid token address');
+  return (tokensMapJSON as ChainTokenMap)[chainId][tokenAddress];
 }
 
 export function getTokenDecimals(chainId: number, tokenAddress: string): number {
