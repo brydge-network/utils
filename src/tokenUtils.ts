@@ -59,6 +59,7 @@ export function getTokenInfo(chainId: number, tokenAddress: string): Token {
   return (tokensMapJSON as ChainTokenMap)[chainId][tokenAddress];
 }
 
+// Returns undefined if the token is not in tokensMap
 export function getCurrencyObject(chainId: number, tokenAddress: string): NativeCurrency | Token {
   if (isNativeAddress(tokenAddress, chainId)) {
     return nativeOnChain(chainId);
@@ -67,10 +68,12 @@ export function getCurrencyObject(chainId: number, tokenAddress: string): Native
   return (tokensMapJSON as ChainTokenMap)[chainId][tokenAddress];
 }
 
+// Default to 18 decimals if token is undefined
 export function getTokenDecimals(chainId: number, tokenAddress: string): number {
   if (isNativeAddress(tokenAddress, chainId)) {
     return 18;
   }
   invariant(isAddress(tokenAddress), 'Invalid token address');
-  return (tokensMapJSON as ChainTokenMap)[chainId][tokenAddress].decimals;
+  const token = (tokensMapJSON as ChainTokenMap)[chainId][tokenAddress];
+  return token ? token.decimals : 18;
 }

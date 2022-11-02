@@ -72,6 +72,11 @@ describe('utils | tokenUtils', () => {
     assert(decimals === 18);
   });
 
+  it('should getTokenDecimals non-existent token addr', () => {
+    const decimals = getTokenDecimals(137, '0x0000000000000000000000000000000000123456');
+    assert(decimals === 18);
+  });
+
   it('should return ETH Currency (Ethereum)', () => {
     const ethNative1 = getCurrencyObject(1, 'NATIVE');
     const ethNative2 = getCurrencyObject(1, 'native');
