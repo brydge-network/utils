@@ -12,7 +12,8 @@
     "test": "jest",
     "lint": "eslint . --ext .ts,.tsx --fix",
     "clean": "rimraf dist",
-    "build-map": "npx ts-node src/helpers/buildMap.ts > src/constants/brydgeTokensMap.json"
+    "build-map": "npx ts-node src/helpers/buildMap.ts > src/constants/brydgeTokensMap.json",
+    "publish": "yarn build && yarn npm publish"
   },
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
