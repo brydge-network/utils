@@ -1,6 +1,6 @@
 {
   "name": "@brydge-network/utils",
-  "version": "0.0.33",
+  "version": "0.0.34",
   "files": [
     "dist"
   ],
@@ -8,7 +8,7 @@
     "node": ">=16"
   },
   "scripts": {
-    "build": "yarn clean && tsc -p tsconfig.build.json && webpack --config webpack.config.js && yarn build-map",
+    "build": "yarn && yarn clean && tsc -p tsconfig.build.json && webpack --config webpack.config.js && yarn build-map",
     "test": "jest",
     "lint": "eslint . --ext .ts,.tsx --fix",
     "clean": "rimraf dist",
@@ -41,7 +41,7 @@
     "webpack-cli": "^4.7.2"
   },
   "dependencies": {
-    "@brydge-network/token-list": "^1.5.3",
+    "@brydge-network/token-list": "^1.5.4",
     "@uniswap/sdk-core": "^3.1.0",
     "@uniswap/smart-order-router": "^2.10.0",
     "ajv": "^8.8.2",
