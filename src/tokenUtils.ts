@@ -1,7 +1,9 @@
-import { NativeCurrency } from '@uniswap/sdk-core';
+import { Currency, NativeCurrency } from '@uniswap/sdk-core';
 import { isAddress } from 'ethers/lib/utils';
 import invariant from 'tiny-invariant';
-import { AVAX_NATIVE_ADDRESS, MATIC_NATIVE_ADDRESS, nativeOnChain } from './constants';
+import {
+  AVAX_NATIVE_ADDRESS, MATIC_NATIVE_ADDRESS, nativeOnChain, QUICKSWAP_ONLY_TOKEN_LIST,
+} from './constants';
 import tokensMapJSON from './constants/brydgeTokensMap.json';
 
 interface ChainTokenMap {
@@ -76,4 +78,10 @@ export function getTokenDecimals(chainId: number, tokenAddress: string): number 
   invariant(isAddress(tokenAddress), 'Invalid token address');
   const token = (tokensMapJSON as ChainTokenMap)[chainId][tokenAddress];
   return token ? token.decimals : 18;
+}
+
+export function isQuickSwapToken(token: Currency | undefined | null): boolean {
+  if (!token) return false;
+  const address = token.isToken ? token.address : '0';
+  return QUICKSWAP_ONLY_TOKEN_LIST.includes(address.toLowerCase());
 }
