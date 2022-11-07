@@ -7,7 +7,7 @@ const ajv = new Ajv();
 interface SupplyParams {
   minterAddress: string;
   jsonRpcUrl?: string;
-  networkId?: number;
+  chainId?: number;
 }
 
 const schema = {
@@ -15,15 +15,15 @@ const schema = {
   properties: {
     minterAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$' },
     jsonRpcUrl: { type: 'string' },
-    networkId: { type: 'number', minimum: 1, maximum: 100000 },
+    chainId: { type: 'number', minimum: 1, maximum: 100000 },
   },
-  anyOf: [{ required: ['minterAddress', 'jsonRpcUrl'] }, { required: ['minterAddress', 'networkId'] }],
+  anyOf: [{ required: ['minterAddress', 'jsonRpcUrl'] }, { required: ['minterAddress', 'chainId'] }],
 };
 
 export async function getTotalSupply(supplyParams: SupplyParams): Promise<number> {
   // Validate the params
   if (!ajv.validate(schema, supplyParams)) {
-    throw new Error(ajv.errorsText());
+    throw new Error('Invalid params');
   }
   const minterABI = minterABIs[supplyParams.minterAddress];
   if (!minterABI) {
@@ -33,8 +33,8 @@ export async function getTotalSupply(supplyParams: SupplyParams): Promise<number
   let provider: ethers.providers.BaseProvider;
   if (supplyParams.jsonRpcUrl) {
     provider = new ethers.providers.JsonRpcProvider(supplyParams.jsonRpcUrl);
-  } else if (supplyParams.networkId) {
-    provider = getDefaultProvider(ethers.providers.getNetwork(supplyParams.networkId));
+  } else if (supplyParams.chainId) {
+    provider = getDefaultProvider(ethers.providers.getNetwork(supplyParams.chainId));
   } else {
     throw new Error('No network or jsonRpcUrl provided');
   }

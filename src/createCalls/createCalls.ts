@@ -11,7 +11,7 @@ interface CallParams {
   contractAddress: string;
   minterAddress: string;
   jsonRpcUrl?: string;
-  networkId?: number;
+  chainId?: number;
   userAddress?: string;
 }
 
@@ -23,7 +23,7 @@ const schema = {
     contractAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$' },
     minterAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$' },
     jsonRpcUrl: { type: 'string' },
-    networkId: { type: 'number', minimum: 1, maximum: 100000 },
+    chainId: { type: 'number', minimum: 1, maximum: 100000 },
     userAddress: {
       type: 'string',
       pattern: '^0x[a-fA-F0-9]{40}$',
@@ -31,7 +31,7 @@ const schema = {
     },
   },
   required: ['mintPrice', 'mintAmount', 'contractAddress', 'minterAddress'],
-  anyOf: [{ required: ['jsonRpcUrl'] }, { required: ['networkId'] }],
+  anyOf: [{ required: ['jsonRpcUrl'] }, { required: ['chainId'] }],
 };
 
 export type ICall = {
@@ -41,10 +41,10 @@ export type ICall = {
 };
 
 // Regular Mint ICall
-export function CreateMintICall(callParams: CallParams): ICall[] {
+export function createMintICall(callParams: CallParams): ICall[] {
   // Validate the params
   if (!ajv.validate(schema, callParams)) {
-    throw new Error(ajv.errorsText());
+    throw new Error('No chainId or jsonRpcUrl provided');
   }
   const contractABI = contractABIs[callParams.contractAddress];
   if (!contractABI) {
@@ -59,10 +59,10 @@ export function CreateMintICall(callParams: CallParams): ICall[] {
   let provider: ethers.providers.BaseProvider;
   if (callParams.jsonRpcUrl) {
     provider = new ethers.providers.JsonRpcProvider(callParams.jsonRpcUrl);
-  } else if (callParams.networkId) {
-    provider = getDefaultProvider(callParams.networkId);
+  } else if (callParams.chainId) {
+    provider = getDefaultProvider(callParams.chainId);
   } else {
-    throw new Error('No network or jsonRpcUrl provided');
+    throw new Error('Invalid params');
   }
 
   const contract = new Contract(callParams.contractAddress, contractABI, provider);
