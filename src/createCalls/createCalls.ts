@@ -7,7 +7,7 @@ const ajv = new Ajv();
 
 interface CallParams {
   mintPrice: number;
-  mintAmount: number;
+  mintAmount?: number;
   contractAddress: string;
   minterAddress: string;
   jsonRpcUrl?: string;
@@ -19,7 +19,7 @@ const schema = {
   type: 'object',
   properties: {
     mintPrice: { type: 'number', minimum: 0 },
-    mintAmount: { type: 'number', minimum: 0 },
+    mintAmount: { type: 'number', minimum: 1, default: 1 },
     contractAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$' },
     minterAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$' },
     jsonRpcUrl: { type: 'string' },
@@ -41,42 +41,41 @@ export type ICall = {
 };
 
 // Regular Mint ICall
-export function CreateMintICall(
-  mintPrice: BigNumber,
-  mintAmount: number,
-  contractAddress: string,
-  minterAddress: string,
-  jsonRpcUrl: string = '',
-  networkId: number = 0,
-  userAddress: string = '0x0123456789abcdeffedcba9876543210deadbeef',
-): ICall[] {
-  const contractABI = contractABIs[contractAddress];
+export function CreateMintICall(callParams: CallParams): ICall[] {
+  // Validate the params
+  if (!ajv.validate(schema, callParams)) {
+    throw new Error(ajv.errorsText());
+  }
+  const contractABI = contractABIs[callParams.contractAddress];
   if (!contractABI) {
     throw new Error('Contract ABI not found');
   }
-  const minterABI = minterABIs[minterAddress];
+  const minterABI = minterABIs[callParams.minterAddress];
   if (!minterABI) {
     throw new Error('Minter ABI not found');
   }
 
   // Create a provider
   let provider: ethers.providers.BaseProvider;
-  if (jsonRpcUrl) {
-    provider = new ethers.providers.JsonRpcProvider(jsonRpcUrl);
-  } else if (networkId) {
-    provider = getDefaultProvider(networkId);
+  if (callParams.jsonRpcUrl) {
+    provider = new ethers.providers.JsonRpcProvider(callParams.jsonRpcUrl);
+  } else if (callParams.networkId) {
+    provider = getDefaultProvider(callParams.networkId);
   } else {
     throw new Error('No network or jsonRpcUrl provided');
   }
 
-  const contract = new Contract(contractAddress, contractABI, provider);
-  const minter = new Contract(minterAddress, minterABI, provider);
-  const mintData = contract.interface.encodeFunctionData('mint', [mintAmount]);
-  const mintAndTransferData = minter.interface.encodeFunctionData('handleERC721Transfer', [mintData, userAddress]);
+  const contract = new Contract(callParams.contractAddress, contractABI, provider);
+  const minter = new Contract(callParams.minterAddress, minterABI, provider);
+  const mintData = contract.interface.encodeFunctionData('mint', [callParams.mintAmount]);
+  const mintAndTransferData = minter.interface.encodeFunctionData('handleERC721Transfer', [
+    mintData,
+    callParams.userAddress,
+  ]);
   const ICall = [
     {
-      _to: contractAddress,
-      _value: mintPrice.mul(mintAmount),
+      _to: callParams.contractAddress,
+      _value: BigNumber.from(callParams.mintPrice).mul(BigNumber.from(callParams.mintAmount)),
       _calldata: mintAndTransferData,
     },
   ];

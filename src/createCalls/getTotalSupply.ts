@@ -21,6 +21,7 @@ const schema = {
 };
 
 export async function getTotalSupply(supplyParams: SupplyParams): Promise<number> {
+  // Validate the params
   if (!ajv.validate(schema, supplyParams)) {
     throw new Error(ajv.errorsText());
   }
