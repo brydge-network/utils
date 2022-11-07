@@ -1,10 +1,5 @@
 import Ajv from 'ajv';
-
-export type ICall = {
-  _to: string;
-  _value: any;
-  _calldata: string;
-};
+import { ICall } from './createCalls/createCalls';
 
 interface BrydgeWidgetParams {
   darkMode: boolean;

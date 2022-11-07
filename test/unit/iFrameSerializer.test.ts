@@ -1,4 +1,5 @@
-import { ICall, encodeUrl, decodeUrl } from '../../src/iFrameSerializer';
+import { encodeUrl, decodeUrl } from '../../src/iFrameSerializer';
+import { ICall } from '../../src/createCalls';
 
 const darkMode = true;
 const isERC20Mode = true;
@@ -34,7 +35,6 @@ describe('utils | safePackageName', () => {
 
     // Testing the decodeUrl function
     const decodedUrl = decodeUrl(url);
-    expect('error' in decodedUrl).toBe(false);
     if ('error' in decodedUrl) {
       expect(true).toBe(false); // Fail
     } else {
