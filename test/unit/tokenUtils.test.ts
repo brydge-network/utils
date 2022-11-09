@@ -1,6 +1,9 @@
+import { Currency } from '@uniswap/sdk-core';
 import { assert } from 'console';
 import { AVAX_NATIVE_ADDRESS, MATIC_NATIVE_ADDRESS } from '../../src';
-import { getTokenDecimals, getTokenInfo, isNativeAddress } from '../../src/tokenUtils';
+import {
+  getCurrencyObject, getTokenDecimals, getTokenInfo, isNativeAddress,
+} from '../../src/tokenUtils';
 
 describe('utils | tokenUtils', () => {
   it('should get USDT on Ethereum', () => {
@@ -67,5 +70,66 @@ describe('utils | tokenUtils', () => {
   it('should getTokenDecimals MATIC Polygon', () => {
     const decimals = getTokenDecimals(137, '0x0000000000000000000000000000000000001010');
     assert(decimals === 18);
+  });
+
+  it('should getTokenDecimals non-existent token addr', () => {
+    const decimals = getTokenDecimals(137, '0x0000000000000000000000000000000000123456');
+    assert(decimals === 18);
+  });
+
+  it('should return ETH Currency (Ethereum)', () => {
+    const ethNative1 = getCurrencyObject(1, 'NATIVE');
+    const ethNative2 = getCurrencyObject(1, 'native');
+    assert(ethNative1.symbol === 'ETH');
+    assert(ethNative1.decimals === 18);
+    assert((ethNative1 as Currency).isNative === true);
+    assert(ethNative2.symbol === 'ETH');
+    assert(ethNative2.decimals === 18);
+    assert((ethNative2 as Currency).isNative === true);
+  });
+
+  it('should return MATIC Currency (Polygon)', () => {
+    const maticNative1 = getCurrencyObject(137, '0x0000000000000000000000000000000000001010');
+    const maticNative2 = getCurrencyObject(137, 'NATIVE');
+    assert(maticNative1.symbol === 'MATIC');
+    assert(maticNative1.decimals === 18);
+    assert((maticNative1 as Currency).isNative === true);
+    assert(maticNative2.symbol === 'MATIC');
+    assert(maticNative2.decimals === 18);
+    assert((maticNative2 as Currency).isNative === true);
+  });
+
+  it('should return ETH Currency (Arbitrum)', () => {
+    const ethNative1 = getCurrencyObject(42161, 'NATIVE');
+    const ethNative2 = getCurrencyObject(42161, 'native');
+    assert(ethNative1.symbol === 'ETH');
+    assert(ethNative1.decimals === 18);
+    assert((ethNative1 as Currency).isNative === true);
+    assert(ethNative2.symbol === 'ETH');
+    assert(ethNative2.decimals === 18);
+    assert((ethNative2 as Currency).isNative === true);
+  });
+
+  it('should return ETH Currency (Optimism)', () => {
+    const ethNative1 = getCurrencyObject(10, 'NATIVE');
+    const ethNative2 = getCurrencyObject(10, 'native');
+    assert(ethNative1.symbol === 'ETH');
+    assert(ethNative1.decimals === 18);
+    assert((ethNative1 as Currency).isNative === true);
+    assert(ethNative2.symbol === 'ETH');
+    assert(ethNative2.decimals === 18);
+    assert((ethNative2 as Currency).isNative === true);
+  });
+
+  it('should return USDC (Ethereum, Polygon, Arbitrum, Optimism)', () => {
+    const usdcETH = getCurrencyObject(1, '0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48');
+    const usdcOpt = getCurrencyObject(10, '0x7F5c764cBc14f9669B88837ca1490cCa17c31607');
+    const usdcPoly = getCurrencyObject(137, '0x2791Bca1f2de4661ED88A30C99A7a9449Aa84174');
+    const usdcArb = getCurrencyObject(42161, '0xFF970A61A04b1cA14834A43f5dE4533eBDDB5CC8');
+
+    assert(usdcETH.symbol === 'USDC');
+    assert(usdcOpt.symbol === 'USDC');
+    assert(usdcPoly.symbol === 'USDC');
+    assert(usdcArb.symbol === 'USDC');
   });
 });
