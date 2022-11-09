@@ -1,5 +1,5 @@
 import { Contract, BigNumber, ethers, getDefaultProvider } from 'ethers';
-import { contractABIs } from './contractABIs';
+import { delegateABIs } from './delegateABIs';
 import { minterABIs } from './minterABIs';
 import Ajv from 'ajv';
 
@@ -46,7 +46,7 @@ export function createMintICall(callParams: CallParams): ICall[] {
   if (!ajv.validate(schema, callParams)) {
     throw new Error('No chainId or jsonRpcUrl provided');
   }
-  const contractABI = contractABIs[callParams.contractAddress];
+  const contractABI = delegateABIs[callParams.contractAddress];
   if (!contractABI) {
     throw new Error('Contract ABI not found');
   }
