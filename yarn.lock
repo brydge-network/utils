@@ -408,10 +408,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@brydge-network/token-list@npm:^1.5.4":
-  version: 1.5.11
-  resolution: "@brydge-network/token-list@npm:1.5.11"
-  checksum: dd0b9143be8ff4043c9500248e9830835d3bd835a35f5279ba25cd9b9c01d9b7d58a75ddd3a9d7768ba9301d12174f12256241d3cf8e01f88e4f3400fc967ab1
+"@brydge-network/token-list@npm:^1.5.13":
+  version: 1.5.13
+  resolution: "@brydge-network/token-list@npm:1.5.13"
+  checksum: cf166d588a97e38d8d7b8ef4a7cf8aed85176b6c3a7d5b9cf3b212b5a1f97e7f2bd60173da21f092d13f17a5e2acfc8a65c03833974c84028a82fb6dec8f9401
   languageName: node
   linkType: hard
 
@@ -419,7 +419,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@brydge-network/utils@workspace:."
   dependencies:
-    "@brydge-network/token-list": ^1.5.4
+    "@brydge-network/token-list": ^1.5.13
     "@swc/core": ^1.3.4
     "@swc/jest": ^0.2.23
     "@types/jest": ^29.1.1

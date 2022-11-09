@@ -1567,6 +1567,14 @@
       "chainId": 137,
       "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0xc00e94Cb662C3520282E6f5717214004A7f26888/logo.png"
     },
+    "0x483dd3425278C1f79F377f1034d9d2CaE55648B6": {
+      "name": "CrowdSwap",
+      "address": "0x483dd3425278C1f79F377f1034d9d2CaE55648B6",
+      "symbol": "CROWD",
+      "decimals": 18,
+      "chainId": 137,
+      "logoURI": "https://assets.coingecko.com/coins/images/23928/small/icon_192.png?1645690364"
+    },
     "0x172370d5Cd63279eFa6d502DAB29171933a610AF": {
       "name": "Curve DAO Token",
       "address": "0x172370d5Cd63279eFa6d502DAB29171933a610AF",
@@ -1614,6 +1622,14 @@
       "decimals": 18,
       "chainId": 137,
       "logoURI": "https://raw.githubusercontent.com/trustwallet/assets/master/blockchains/ethereum/assets/0x514910771AF9Ca656af840dff83E8264EcF986CA/logo.png"
+    },
+    "0xa3Fa99A148fA48D14Ed51d610c367C61876997F1": {
+      "name": "miMATIC",
+      "address": "0xa3Fa99A148fA48D14Ed51d610c367C61876997F1",
+      "symbol": "MAI",
+      "decimals": 18,
+      "chainId": 137,
+      "logoURI": "https://assets.coingecko.com/coins/images/15264/small/mimatic-red.png?1620281018"
     },
     "0xA1c57f48F0Deb89f569dFbE6E2B7f46D33606fD4": {
       "chainId": 137,
