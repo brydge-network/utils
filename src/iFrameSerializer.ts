@@ -2,13 +2,16 @@ import Ajv from 'ajv';
 import { ICall } from './createCalls/createCalls';
 
 interface BrydgeWidgetParams {
-  darkMode: boolean;
-  isERC20Mode: boolean;
+  darkMode?: boolean;
+  isERC20Mode?: boolean;
   outputTokenAddress: string;
   destinationChainId: number;
   title: string;
   price: number;
   iCalls: ICall[];
+  baseColor?: string;
+  hoverColor?: string;
+  backgroundColor?: string;
 }
 
 const schema = {
@@ -33,10 +36,11 @@ const schema = {
       },
       default: [],
     },
+    baseColor: { type: 'string', pattern: '^#[A-Fa-f0-9]{6}' },
+    hoverColor: { type: 'string', pattern: '^#[A-Fa-f0-9]{6}' },
+    backgroundColor: { type: 'string', pattern: '^#[A-Fa-f0-9]{6}' },
   },
-  anyOf: [
-    { required: ['darkMode', 'isERC20Mode', 'outputTokenAddress', 'destinationChainId', 'title', 'price', 'iCalls'] },
-  ],
+  anyOf: [{ required: ['outputTokenAddress', 'destinationChainId', 'title', 'price', 'iCalls'] }],
 };
 
 const ajv = new Ajv();
