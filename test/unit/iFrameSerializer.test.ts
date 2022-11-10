@@ -19,11 +19,21 @@ const iCalls: ICall[] = [
     _calldata: '0x0000000000000000000000000000000000000000000000000000000000000000',
   },
 ];
+const baseColor = '#000000';
 
 describe('utils | safePackageName', () => {
   it('should encode url params and decode them back into the same params', () => {
     // Testing the encodeUrl function
-    const url = encodeUrl({ darkMode, isERC20Mode, outputTokenAddress, destinationChainId, title, price, iCalls });
+    const url = encodeUrl({
+      darkMode,
+      isERC20Mode,
+      outputTokenAddress,
+      destinationChainId,
+      title,
+      price,
+      iCalls,
+      baseColor,
+    });
     const urlObject = JSON.parse(decodeURIComponent(url));
     expect(urlObject.darkMode).toEqual(darkMode);
     expect(urlObject.isERC20Mode).toEqual(isERC20Mode);
@@ -32,6 +42,7 @@ describe('utils | safePackageName', () => {
     expect(urlObject.title).toEqual(title);
     expect(urlObject.price).toEqual(price);
     expect(urlObject.iCalls).toEqual(iCalls);
+    expect(urlObject.baseColor).toEqual(baseColor);
 
     // Testing the decodeUrl function
     const decodedUrl = decodeUrl(url);
@@ -45,6 +56,7 @@ describe('utils | safePackageName', () => {
       expect(decodedUrl?.title).toBe(title);
       expect(decodedUrl?.price).toBe(price);
       expect(decodedUrl?.iCalls).toEqual(iCalls);
+      expect(decodedUrl?.baseColor).toBe(baseColor);
     }
   });
 });
