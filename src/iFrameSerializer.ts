@@ -1,14 +1,15 @@
 import Ajv from 'ajv';
-import { ICall } from './createCalls/createCalls';
+import { ICall, LpInfo } from './constants';
 
-interface BrydgeWidgetParams {
+export interface BrydgeWidgetParams {
   darkMode?: boolean;
-  isERC20Mode?: boolean;
-  outputTokenAddress: string;
-  destinationChainId: number;
-  title: string;
-  price: number;
-  iCalls: ICall[];
+  widgetMode?: string;
+  outputTokenAddress?: string;
+  destinationChainId?: number;
+  title?: string;
+  price?: number;
+  iCalls?: ICall[];
+  lpInfo?: LpInfo;
   baseColor?: string;
   hoverColor?: string;
   backgroundColor?: string;
@@ -18,7 +19,7 @@ const schema = {
   type: 'object',
   properties: {
     darkMode: { type: 'boolean', default: true },
-    isERC20Mode: { type: 'boolean', default: false },
+    widgetMode: { type: 'string', enum: ['SWAP', 'PURCHASE', 'LP_DEPOSIT'], default: 'SWAP' },
     outputTokenAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$|NATIVE', default: 'NATIVE' },
     destinationChainId: { type: 'number', minimum: 1, maximum: 100000, default: 1 },
     title: { type: 'string', default: 'Brydge' },
@@ -36,19 +37,56 @@ const schema = {
       },
       default: [],
     },
+    lpInfo: {
+      type: 'object',
+      properties: {
+        lpChainId: { type: 'number', minimum: 1, maximum: 100000 },
+        currencyAAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$|NATIVE' },
+        currencyBAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$|NATIVE' },
+        routerAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$' },
+        tokenPairName: { type: 'string' },
+      },
+    },
     baseColor: { type: 'string', pattern: '^#[A-Fa-f0-9]{6}' },
     hoverColor: { type: 'string', pattern: '^#[A-Fa-f0-9]{6}' },
     backgroundColor: { type: 'string', pattern: '^#[A-Fa-f0-9]{6}' },
   },
-  anyOf: [{ required: ['outputTokenAddress', 'destinationChainId', 'title', 'price', 'iCalls'] }],
+  allOf: [
+    {
+      if: {
+        properties: { widgetMode: { enum: ['SWAP'] } },
+      },
+      then: {
+        required: [],
+      },
+    },
+    {
+      if: {
+        properties: { widgetMode: { const: 'PURCHASE' } },
+      },
+      then: {
+        required: ['outputTokenAddress', 'destinationChainId', 'price', 'iCalls'],
+      },
+    },
+    {
+      if: {
+        properties: { widgetMode: { const: 'LP_DEPOSIT' } },
+      },
+      then: {
+        required: ['lpInfo'],
+      },
+    },
+  ],
 };
 
 const ajv = new Ajv();
 
-export function encodeUrl(widgetParams: {}): string {
-  const valid = ajv.validate(schema, widgetParams);
+export function encodeUrl(widgetParams: BrydgeWidgetParams): string {
+  // set default mode to SWAP if not provided
+  let params = { ...widgetParams, widgetMode: widgetParams.widgetMode || 'SWAP' };
+  const valid = ajv.validate(schema, params);
   if (valid) {
-    return encodeURIComponent(JSON.stringify(widgetParams));
+    return encodeURIComponent(JSON.stringify(params));
   }
   throw new Error(ajv.errorsText());
 }
