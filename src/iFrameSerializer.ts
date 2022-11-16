@@ -3,7 +3,7 @@ import { ICall, LpInfo } from './constants';
 
 interface BrydgeWidgetParams {
   darkMode?: boolean;
-  widgetMode: string;
+  widgetMode?: string;
   outputTokenAddress?: string;
   destinationChainId?: number;
   title?: string;
