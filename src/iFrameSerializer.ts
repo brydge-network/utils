@@ -3,7 +3,7 @@ import { ICall } from './createCalls/createCalls';
 
 interface BrydgeWidgetParams {
   darkMode?: boolean;
-  isERC20Mode?: boolean;
+  widgetMode: string;
   outputTokenAddress: string;
   destinationChainId: number;
   title: string;
@@ -18,7 +18,7 @@ const schema = {
   type: 'object',
   properties: {
     darkMode: { type: 'boolean', default: true },
-    isERC20Mode: { type: 'boolean', default: false },
+    widgetMode: { type: 'string', enum: ['SWAP', 'PURCHASE', 'LP_DEPOSIT'] },
     outputTokenAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$|NATIVE', default: 'NATIVE' },
     destinationChainId: { type: 'number', minimum: 1, maximum: 100000, default: 1 },
     title: { type: 'string', default: 'Brydge' },
@@ -40,7 +40,35 @@ const schema = {
     hoverColor: { type: 'string', pattern: '^#[A-Fa-f0-9]{6}' },
     backgroundColor: { type: 'string', pattern: '^#[A-Fa-f0-9]{6}' },
   },
-  anyOf: [{ required: ['outputTokenAddress', 'destinationChainId', 'title', 'price', 'iCalls'] }],
+  allOf: [
+    {
+      required: ['widgetMode'],
+    },
+    {
+      if: {
+        properties: { widgetMode: { const: 'SWAP' } },
+      },
+      then: {
+        required: [],
+      },
+    },
+    {
+      if: {
+        properties: { widgetMode: { const: 'PURCHASE' } },
+      },
+      then: {
+        required: ['outputTokenAddress', 'destinationChainId', 'price', 'iCalls'],
+      },
+    },
+    {
+      if: {
+        properties: { widgetMode: { const: 'LP_DEPOSIT' } },
+      },
+      then: {
+        required: [],
+      },
+    },
+  ],
 };
 
 const ajv = new Ajv();

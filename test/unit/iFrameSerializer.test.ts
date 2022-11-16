@@ -2,7 +2,7 @@ import { encodeUrl, decodeUrl } from '../../src/iFrameSerializer';
 import { ICall } from '../../src/createCalls';
 
 const darkMode = true;
-const isERC20Mode = true;
+const widgetMode = 'PURCHASE';
 const outputTokenAddress = '0x0000000000000000000000000000000000000000';
 const destinationChainId = 1;
 const title = 'title';
@@ -26,7 +26,7 @@ describe('utils | safePackageName', () => {
     // Testing the encodeUrl function
     const url = encodeUrl({
       darkMode,
-      isERC20Mode,
+      widgetMode,
       outputTokenAddress,
       destinationChainId,
       title,
@@ -36,7 +36,7 @@ describe('utils | safePackageName', () => {
     });
     const urlObject = JSON.parse(decodeURIComponent(url));
     expect(urlObject.darkMode).toEqual(darkMode);
-    expect(urlObject.isERC20Mode).toEqual(isERC20Mode);
+    expect(urlObject.widgetMode).toEqual(widgetMode);
     expect(urlObject.outputTokenAddress).toEqual(outputTokenAddress);
     expect(urlObject.destinationChainId).toEqual(destinationChainId);
     expect(urlObject.title).toEqual(title);
@@ -50,7 +50,7 @@ describe('utils | safePackageName', () => {
       expect(true).toBe(false); // Fail
     } else {
       expect(decodedUrl?.darkMode).toBe(darkMode);
-      expect(decodedUrl?.isERC20Mode).toBe(isERC20Mode);
+      expect(decodedUrl?.widgetMode).toBe(widgetMode);
       expect(decodedUrl?.outputTokenAddress).toBe(outputTokenAddress);
       expect(decodedUrl?.destinationChainId).toBe(destinationChainId);
       expect(decodedUrl?.title).toBe(title);
