@@ -1,7 +1,7 @@
 import Ajv from 'ajv';
 import { ICall, LpInfo } from './constants';
 
-interface BrydgeWidgetParams {
+export interface BrydgeWidgetParams {
   darkMode?: boolean;
   widgetMode?: string;
   outputTokenAddress?: string;
