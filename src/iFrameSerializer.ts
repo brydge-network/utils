@@ -83,12 +83,10 @@ const ajv = new Ajv();
 
 export function encodeUrl(widgetParams: BrydgeWidgetParams): string {
   // set default mode to SWAP if not provided
-  if (!widgetParams.widgetMode) {
-    widgetParams.widgetMode = 'SWAP';
-  }
-  const valid = ajv.validate(schema, widgetParams);
+  let params = { ...widgetParams, widgetMode: widgetParams.widgetMode || 'SWAP' };
+  const valid = ajv.validate(schema, params);
   if (valid) {
-    return encodeURIComponent(JSON.stringify(widgetParams));
+    return encodeURIComponent(JSON.stringify(params));
   }
   throw new Error(ajv.errorsText());
 }

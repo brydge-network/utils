@@ -67,12 +67,12 @@ export function createMintICall(callParams: CallParams): ICall[] {
     mintData,
     callParams.userAddress,
   ]);
-  const ICall = [
+  const iCall: [ICall] = [
     {
       _to: callParams.contractAddress,
       _value: BigNumber.from(callParams.mintPrice).mul(BigNumber.from(callParams.mintAmount)),
       _calldata: mintAndTransferData,
     },
   ];
-  return ICall;
+  return iCall;
 }

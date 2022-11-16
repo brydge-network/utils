@@ -61,10 +61,8 @@ describe('utils | safePackageName', () => {
   });
   it('should encode url default params and decode them back into the same params', () => {
     // Testing the encodeUrl function
-    console.log('testing default params');
     const url = encodeUrl({});
     const urlObject = JSON.parse(decodeURIComponent(url));
-    console.log('urlObject', urlObject);
     expect(urlObject.widgetMode).toEqual('SWAP');
 
     // Testing the decodeUrl function
