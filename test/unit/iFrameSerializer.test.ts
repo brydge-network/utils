@@ -1,5 +1,5 @@
 import { encodeUrl, decodeUrl } from '../../src/iFrameSerializer';
-import { ICall } from '../../src/createCalls';
+import { ICall } from '../../src/constants';
 
 const darkMode = true;
 const widgetMode = 'PURCHASE';
@@ -57,6 +57,22 @@ describe('utils | safePackageName', () => {
       expect(decodedUrl?.price).toBe(price);
       expect(decodedUrl?.iCalls).toEqual(iCalls);
       expect(decodedUrl?.baseColor).toBe(baseColor);
+    }
+  });
+  it('should encode url default params and decode them back into the same params', () => {
+    // Testing the encodeUrl function
+    console.log('testing default params');
+    const url = encodeUrl({});
+    const urlObject = JSON.parse(decodeURIComponent(url));
+    console.log('urlObject', urlObject);
+    expect(urlObject.widgetMode).toEqual('SWAP');
+
+    // Testing the decodeUrl function
+    const decodedUrl = decodeUrl(url);
+    if ('error' in decodedUrl) {
+      expect(true).toBe(false); // Fail
+    } else {
+      expect(decodedUrl?.widgetMode).toBe('SWAP');
     }
   });
 });

@@ -1,14 +1,15 @@
 import Ajv from 'ajv';
-import { ICall } from './createCalls/createCalls';
+import { ICall, LpInfo } from './constants';
 
 interface BrydgeWidgetParams {
   darkMode?: boolean;
   widgetMode: string;
-  outputTokenAddress: string;
-  destinationChainId: number;
-  title: string;
-  price: number;
-  iCalls: ICall[];
+  outputTokenAddress?: string;
+  destinationChainId?: number;
+  title?: string;
+  price?: number;
+  iCalls?: ICall[];
+  lpInfo?: LpInfo;
   baseColor?: string;
   hoverColor?: string;
   backgroundColor?: string;
@@ -18,7 +19,7 @@ const schema = {
   type: 'object',
   properties: {
     darkMode: { type: 'boolean', default: true },
-    widgetMode: { type: 'string', enum: ['SWAP', 'PURCHASE', 'LP_DEPOSIT'] },
+    widgetMode: { type: 'string', enum: ['SWAP', 'PURCHASE', 'LP_DEPOSIT'], default: 'SWAP' },
     outputTokenAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$|NATIVE', default: 'NATIVE' },
     destinationChainId: { type: 'number', minimum: 1, maximum: 100000, default: 1 },
     title: { type: 'string', default: 'Brydge' },
@@ -36,17 +37,24 @@ const schema = {
       },
       default: [],
     },
+    lpInfo: {
+      type: 'object',
+      properties: {
+        lpChainId: { type: 'number', minimum: 1, maximum: 100000 },
+        currencyAAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$|NATIVE' },
+        currencyBAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$|NATIVE' },
+        routerAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$' },
+        tokenPairName: { type: 'string' },
+      },
+    },
     baseColor: { type: 'string', pattern: '^#[A-Fa-f0-9]{6}' },
     hoverColor: { type: 'string', pattern: '^#[A-Fa-f0-9]{6}' },
     backgroundColor: { type: 'string', pattern: '^#[A-Fa-f0-9]{6}' },
   },
   allOf: [
     {
-      required: ['widgetMode'],
-    },
-    {
       if: {
-        properties: { widgetMode: { const: 'SWAP' } },
+        properties: { widgetMode: { enum: ['SWAP'] } },
       },
       then: {
         required: [],
@@ -65,7 +73,7 @@ const schema = {
         properties: { widgetMode: { const: 'LP_DEPOSIT' } },
       },
       then: {
-        required: [],
+        required: ['lpInfo'],
       },
     },
   ],
@@ -73,7 +81,11 @@ const schema = {
 
 const ajv = new Ajv();
 
-export function encodeUrl(widgetParams: {}): string {
+export function encodeUrl(widgetParams: BrydgeWidgetParams): string {
+  // set default mode to SWAP if not provided
+  if (!widgetParams.widgetMode) {
+    widgetParams.widgetMode = 'SWAP';
+  }
   const valid = ajv.validate(schema, widgetParams);
   if (valid) {
     return encodeURIComponent(JSON.stringify(widgetParams));

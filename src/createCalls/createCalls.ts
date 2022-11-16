@@ -1,6 +1,7 @@
 import { Contract, BigNumber, ethers, getDefaultProvider } from 'ethers';
 import { delegateABIs } from './delegateABIs';
 import { minterABIs } from './minterABIs';
+import { ICall } from '../constants';
 import Ajv from 'ajv';
 
 const ajv = new Ajv();
@@ -32,12 +33,6 @@ const schema = {
   },
   required: ['mintPrice', 'mintAmount', 'contractAddress', 'minterAddress'],
   anyOf: [{ required: ['jsonRpcUrl'] }, { required: ['chainId'] }],
-};
-
-export type ICall = {
-  _to: string;
-  _value: any;
-  _calldata: string;
 };
 
 // Regular Mint ICall
