@@ -1,12 +1,12 @@
 import { ContractInterface } from 'ethers';
 
-interface integrationData {
+interface IntegrationData {
   contractAbi: ContractInterface;
   delegateAddress: string;
   delegateAbi: ContractInterface;
 }
 
-export const integrationRegistry: { [contractAddress: string]: integrationData } = {
+export const integrationRegistry: { [contractAddress: string]: IntegrationData } = {
   // HOOTLES
   '0xfaf3795ac17962d48b9aba848151efd2107a634e': {
     contractAbi: [
