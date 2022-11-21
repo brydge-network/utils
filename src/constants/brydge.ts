@@ -54,3 +54,17 @@ export const BRYDGE_ROUTER_MAP: AddressMap = {
   10: MULTICHAIN_OPTIMISM_ROUTER,
   42161: MULTICHAIN_ARBITRUM_ROUTER,
 };
+
+export type ICall = {
+  _to: string;
+  _value: any;
+  _calldata: string;
+};
+
+export type LpInfo = {
+  lpChainId: number;
+  currencyAAddress: string;
+  currencyBAddress: string;
+  routerAddress: string;
+  tokenPairName: string;
+};

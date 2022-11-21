@@ -1,5 +1,6 @@
 import { Contract, BigNumber, ethers, getDefaultProvider } from 'ethers';
 import { integrationRegistry } from './integrationResistry';
+import { ICall } from '../constants';
 import Ajv from 'ajv';
 
 const ajv = new Ajv();
@@ -33,12 +34,6 @@ const schema = {
   anyOf: [{ required: ['jsonRpcUrl'] }, { required: ['chainId'] }],
 };
 
-export type ICall = {
-  _to: string;
-  _value: any;
-  _calldata: string;
-};
-
 // Regular Mint ICall
 export function createMintICall(callParams: CallParams): ICall[] {
   // Validate the params
@@ -67,12 +62,12 @@ export function createMintICall(callParams: CallParams): ICall[] {
     mintData,
     callParams.userAddress,
   ]);
-  const ICall = [
+  const iCall: [ICall] = [
     {
       _to: integrationData.delegateAddress,
       _value: BigNumber.from(callParams.mintPrice).mul(BigNumber.from(callParams.mintAmount)),
       _calldata: mintAndTransferData,
     },
   ];
-  return ICall;
+  return iCall;
 }
