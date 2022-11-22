@@ -1,5 +1,5 @@
 import { integrationRegistry } from './integrationResistry';
-import { Contract, ethers, getDefaultProvider } from 'ethers';
+import { Contract, ethers, getDefaultProvider, BigNumber } from 'ethers';
 import Ajv from 'ajv';
 
 const ajv = new Ajv();
@@ -40,6 +40,6 @@ export async function getTotalSupply(supplyParams: SupplyParams): Promise<number
   }
 
   const contract = new Contract(supplyParams.contractAddress, integrationData.contractAbi, provider);
-  const totalSupply = await contract.totalSupply();
-  return totalSupply;
+  const totalSupply = (await contract.totalSupply()) as BigNumber;
+  return totalSupply.toNumber();
 }
