@@ -9,6 +9,9 @@ export interface BrydgeWidgetParams {
   title?: string;
   price?: number;
   iCalls?: ICall[];
+  contractAddress?: string;
+  presalePrice?: number;
+  presaleAmount?: number;
   lpInfo?: LpInfo;
   baseColor?: string;
   hoverColor?: string;
@@ -35,8 +38,10 @@ const schema = {
         },
         required: ['_to', '_value', '_calldata'],
       },
-      default: [],
     },
+    contractAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$' },
+    presalePrice: { type: 'number', minimum: 0, default: 0 },
+    presaleAmount: { type: 'number', minimum: 0, default: 0 },
     lpInfo: {
       type: 'object',
       properties: {
@@ -65,7 +70,14 @@ const schema = {
         properties: { widgetMode: { const: 'PURCHASE' } },
       },
       then: {
-        required: ['outputTokenAddress', 'destinationChainId', 'price', 'iCalls'],
+        anyOf: [
+          {
+            required: ['outputTokenAddress', 'destinationChainId', 'price', 'iCalls'],
+          },
+          {
+            required: ['outputTokenAddress', 'destinationChainId', 'price', 'contractAddress'],
+          },
+        ],
       },
     },
     {

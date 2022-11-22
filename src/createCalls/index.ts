@@ -1,4 +1,3 @@
 export * from './createCalls';
-export * from './minterABIs';
-export * from './delegateABIs';
+export * from './integrationResistry';
 export * from './getTotalSupply';

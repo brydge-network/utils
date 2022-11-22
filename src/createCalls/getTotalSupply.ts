@@ -1,11 +1,11 @@
-import { minterABIs } from './minterABIs';
+import { integrationRegistry } from './integrationResistry';
 import { Contract, ethers, getDefaultProvider } from 'ethers';
 import Ajv from 'ajv';
 
 const ajv = new Ajv();
 
 interface SupplyParams {
-  minterAddress: string;
+  contractAddress: string;
   jsonRpcUrl?: string;
   chainId?: number;
 }
@@ -13,11 +13,11 @@ interface SupplyParams {
 const schema = {
   type: 'object',
   properties: {
-    minterAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$' },
+    contractAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$' },
     jsonRpcUrl: { type: 'string' },
     chainId: { type: 'number', minimum: 1, maximum: 100000 },
   },
-  anyOf: [{ required: ['minterAddress', 'jsonRpcUrl'] }, { required: ['minterAddress', 'chainId'] }],
+  anyOf: [{ required: ['contractAddress', 'jsonRpcUrl'] }, { required: ['contractAddress', 'chainId'] }],
 };
 
 export async function getTotalSupply(supplyParams: SupplyParams): Promise<number> {
@@ -25,9 +25,9 @@ export async function getTotalSupply(supplyParams: SupplyParams): Promise<number
   if (!ajv.validate(schema, supplyParams)) {
     throw new Error('Invalid params');
   }
-  const minterABI = minterABIs[supplyParams.minterAddress];
-  if (!minterABI) {
-    throw new Error('Minter ABI not found');
+  const integrationData = integrationRegistry[supplyParams.contractAddress];
+  if (!integrationData) {
+    throw new Error('Integration not found');
   }
   // Create a provider
   let provider: ethers.providers.BaseProvider;
@@ -39,7 +39,7 @@ export async function getTotalSupply(supplyParams: SupplyParams): Promise<number
     throw new Error('No network or jsonRpcUrl provided');
   }
 
-  const minter = new Contract(supplyParams.minterAddress, minterABI, provider);
-  const totalSupply = await minter.totalSupply();
+  const contract = new Contract(supplyParams.contractAddress, integrationData.contractAbi, provider);
+  const totalSupply = await contract.totalSupply();
   return totalSupply;
 }

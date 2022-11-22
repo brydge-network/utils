@@ -15,14 +15,11 @@ module.exports = {
       },
     ],
   },
-  entry: {
-    iFrameSerializer: './src/iFrameSerializer.ts',
-    createCalls: './src/createCalls/index.ts',
-  },
+  entry: './src/iFrameSerializer.ts',
   output: {
-    filename: '[name]Bundle.js',
+    filename: 'iFrameBundle.js',
     path: path.resolve(__dirname, 'dist'),
     libraryTarget: 'var',
-    library: '[name]',
+    library: 'Serializer',
   },
 };
