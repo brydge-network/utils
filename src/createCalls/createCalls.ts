@@ -54,8 +54,6 @@ export function createMintICall(callParams: CallParams): ICall[] {
     throw new Error('Invalid params');
   }
 
-  console.log('MINT AMOUNT', callParams.mintAmount);
-
   const price = BigNumber.from(callParams.mintPrice);
   const amount = BigNumber.from(callParams.mintAmount);
 
