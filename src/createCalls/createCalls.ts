@@ -3,7 +3,7 @@ import { integrationRegistry } from './integrationResistry';
 import { ICall } from '../constants';
 import Ajv from 'ajv';
 
-const ajv = new Ajv();
+const ajv = new Ajv({ useDefaults: true });
 
 interface CallParams {
   mintPrice: number;
@@ -35,8 +35,9 @@ const schema = {
 // Regular Mint ICall
 export function createMintICall(callParams: CallParams): ICall[] {
   // Validate the params
-  if (!ajv.validate(schema, callParams)) {
-    throw new Error('No chainId or jsonRpcUrl provided');
+  const valid = ajv.validate(schema, callParams);
+  if (!valid) {
+    throw new Error(ajv.errorsText());
   }
   const integrationData = integrationRegistry[callParams.contractAddress];
   if (!integrationData) {
@@ -53,9 +54,14 @@ export function createMintICall(callParams: CallParams): ICall[] {
     throw new Error('Invalid params');
   }
 
+  console.log('MINT AMOUNT', callParams.mintAmount);
+
+  const price = BigNumber.from(callParams.mintPrice);
+  const amount = BigNumber.from(callParams.mintAmount);
+
   const contract = new Contract(callParams.contractAddress, integrationData.contractAbi, provider);
   const delegate = new Contract(integrationData.delegateAddress, integrationData.delegateAbi, provider);
-  const mintData = contract.interface.encodeFunctionData('mint', [callParams.mintAmount]);
+  const mintData = contract.interface.encodeFunctionData('mint', [amount]);
   const mintAndTransferData = delegate.interface.encodeFunctionData('handleERC721Transfer', [
     mintData,
     callParams.userAddress,
@@ -63,7 +69,7 @@ export function createMintICall(callParams: CallParams): ICall[] {
   const iCall: ICall[] = [
     {
       _to: integrationData.delegateAddress,
-      _value: BigNumber.from(callParams.mintPrice).mul(BigNumber.from(callParams.mintAmount)),
+      _value: price.mul(amount),
       _calldata: mintAndTransferData,
     },
   ];

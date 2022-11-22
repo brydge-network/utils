@@ -91,7 +91,7 @@ const schema = {
   ],
 };
 
-const ajv = new Ajv();
+const ajv = new Ajv({ useDefaults: true });
 
 export function encodeUrl(widgetParams: BrydgeWidgetParams): string {
   // set default mode to SWAP if not provided
