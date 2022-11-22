@@ -16,6 +16,7 @@ export interface BrydgeWidgetParams {
   baseColor?: string;
   hoverColor?: string;
   backgroundColor?: string;
+  error?: string;
 }
 
 const schema = {
@@ -25,7 +26,7 @@ const schema = {
     widgetMode: { type: 'string', enum: ['SWAP', 'PURCHASE', 'LP_DEPOSIT'], default: 'SWAP' },
     outputTokenAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$|NATIVE', default: 'NATIVE' },
     destinationChainId: { type: 'number', minimum: 1, maximum: 100000, default: 1 },
-    title: { type: 'string', default: 'Brydge' },
+    title: { type: 'string' },
     price: { type: 'number', minimum: 0, default: 1 },
     iCalls: {
       type: 'array',
@@ -40,8 +41,8 @@ const schema = {
       },
     },
     contractAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$' },
-    presalePrice: { type: 'number', minimum: 0, default: 0 },
-    presaleAmount: { type: 'number', minimum: 0, default: 0 },
+    presalePrice: { type: 'number', minimum: 0 },
+    presaleAmount: { type: 'number', minimum: 0 },
     lpInfo: {
       type: 'object',
       properties: {
@@ -103,7 +104,7 @@ export function encodeUrl(widgetParams: BrydgeWidgetParams): string {
   throw new Error(ajv.errorsText());
 }
 
-export function decodeUrl(path: string): BrydgeWidgetParams | { error: string } {
+export function decodeUrl(path: string): BrydgeWidgetParams {
   try {
     const widgetParams = JSON.parse(decodeURIComponent(path));
     const valid = ajv.validate(schema, widgetParams);

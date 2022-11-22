@@ -1,15 +1,14 @@
 import { getTotalSupply } from '../../src/createCalls';
-import { BigNumber } from 'ethers';
 
 describe('utils | safePackageName', () => {
   it('should connect to the delegate contract and return the total supply', async () => {
     try {
       const totalSupply = await getTotalSupply({
-        contractAddress: '0xfaf3795ac17962d48b9aba848151efd2107a634e',
-        chainId: 137,
+        contractAddress: '0x204a879975378ac0b1f8f378f8cceadc75422f97',
+        chainId: 1,
       });
-      console.log('totalSupply = ', totalSupply.toString());
-      expect(BigNumber.from(0).lte(totalSupply)).toBe(true);
+      console.log('totalSupply = ', totalSupply);
+      expect(totalSupply >= 0).toBe(true);
     } catch (e) {
       console.log(e);
       expect(true).toBe(false); // Fail
