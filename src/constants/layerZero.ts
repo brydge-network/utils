@@ -59,6 +59,7 @@ export const CHAIN_ID_TO_SG_CHAIN_ID: ChainIdMap = {
   1: 101,
   42161: 110,
   10: 111,
+  43114: 106,
 };
 
 export const SG_CHAIN_ID_TO_CHAIN_ID: ChainIdMap = {
@@ -66,4 +67,5 @@ export const SG_CHAIN_ID_TO_CHAIN_ID: ChainIdMap = {
   101: 1,
   110: 42161,
   111: 10,
+  106: 43114,
 };
