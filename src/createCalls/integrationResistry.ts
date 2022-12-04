@@ -898,7 +898,60 @@ export const integrationRegistry: { [contractAddress: string]: IntegrationData }
       },
       { inputs: [], name: 'withdraw', outputs: [], stateMutability: 'nonpayable', type: 'function' },
     ],
-    delegateAddress: '0x0',
-    delegateAbi: [],
+    delegateAddress: '0x85a56617ed0d921B18bE416f0AeA8d2B0a256Cb6',
+    delegateAbi: [
+      {
+        inputs: [
+          {
+            internalType: 'bytes',
+            name: 'data',
+            type: 'bytes',
+          },
+          {
+            internalType: 'address',
+            name: 'user',
+            type: 'address',
+          },
+        ],
+        name: 'handleERC721Transfer',
+        outputs: [],
+        stateMutability: 'payable',
+        type: 'function',
+      },
+      {
+        inputs: [
+          {
+            internalType: 'address',
+            name: '',
+            type: 'address',
+          },
+          {
+            internalType: 'address',
+            name: '',
+            type: 'address',
+          },
+          {
+            internalType: 'uint256',
+            name: '',
+            type: 'uint256',
+          },
+          {
+            internalType: 'bytes',
+            name: '',
+            type: 'bytes',
+          },
+        ],
+        name: 'onERC721Received',
+        outputs: [
+          {
+            internalType: 'bytes4',
+            name: '',
+            type: 'bytes4',
+          },
+        ],
+        stateMutability: 'pure',
+        type: 'function',
+      },
+    ],
   },
 };
