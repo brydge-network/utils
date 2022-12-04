@@ -54,7 +54,7 @@ export function createMintICall(callParams: CallParams): ICall[] {
     throw new Error('Invalid params');
   }
 
-  const price = BigNumber.from(callParams.mintPrice);
+  const price = ethers.utils.parseEther(callParams.mintPrice.toString());
   const amount = BigNumber.from(callParams.mintAmount);
 
   const contract = new Contract(callParams.contractAddress, integrationData.contractAbi, provider);
