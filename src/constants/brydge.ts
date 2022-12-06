@@ -1,7 +1,3 @@
-export type NetworkMap = {
-  [network: string]: [];
-};
-
 export type AddressMap = {
   [chainId: number]: string;
 };

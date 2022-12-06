@@ -1,3 +1,7 @@
+export type NetworkMap = {
+  [network: string]: SupportedChainId;
+};
+
 /**
  * List of all the networks supported by the Uniswap Interface
  */
@@ -36,6 +40,22 @@ export const CHAIN_IDS_TO_NAMES = {
   [SupportedChainId.OPTIMISTIC_KOVAN]: 'optimistic_kovan',
   [SupportedChainId.AVALANCHE]: 'avalanche',
   [SupportedChainId.SOLANA]: 'solana',
+};
+
+export const NETWORK_TO_CHAIN_IDS: NetworkMap = {
+  mainnet: SupportedChainId.MAINNET,
+  ropsten: SupportedChainId.ROPSTEN,
+  rinkeby: SupportedChainId.RINKEBY,
+  goerli: SupportedChainId.GOERLI,
+  kovan: SupportedChainId.KOVAN,
+  polygon: SupportedChainId.POLYGON,
+  polygon_mumbai: SupportedChainId.POLYGON_MUMBAI,
+  arbitrum: SupportedChainId.ARBITRUM_ONE,
+  arbitrum_rinkeby: SupportedChainId.ARBITRUM_RINKEBY,
+  optimism: SupportedChainId.OPTIMISM,
+  optimistic_kovan: SupportedChainId.OPTIMISTIC_KOVAN,
+  avalanche: SupportedChainId.AVALANCHE,
+  solana: SupportedChainId.SOLANA,
 };
 
 /**
