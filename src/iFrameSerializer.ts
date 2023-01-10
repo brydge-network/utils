@@ -25,7 +25,9 @@ const schema = {
     darkMode: { type: 'boolean', default: true },
     widgetMode: { type: 'string', enum: ['SWAP', 'PURCHASE', 'LP_DEPOSIT'], default: 'SWAP' },
     outputTokenAddress: { type: 'string', pattern: '^0x[a-fA-F0-9]{40}$|NATIVE', default: 'NATIVE' },
-    destinationChainId: { type: 'number', minimum: 1, maximum: 100000, default: 1 },
+    destinationChainId: {
+      type: 'number', minimum: 1, maximum: 100000, default: 1,
+    },
     title: { type: 'string' },
     price: { type: 'number', minimum: 0, default: 1 },
     iCalls: {
@@ -96,7 +98,7 @@ const ajv = new Ajv({ useDefaults: true });
 
 export function encodeUrl(widgetParams: BrydgeWidgetParams): string {
   // set default mode to SWAP if not provided
-  let params = { ...widgetParams, widgetMode: widgetParams.widgetMode || 'SWAP' };
+  const params = { ...widgetParams, widgetMode: widgetParams.widgetMode || 'SWAP' };
   const valid = ajv.validate(schema, params);
   if (valid) {
     return encodeURIComponent(JSON.stringify(params));

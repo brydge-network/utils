@@ -1,3 +1,6 @@
+import { BigNumber, BigNumberish } from 'ethers';
+import { IMultichainPortal, MultichainRouter } from '../types/brydge-contracts';
+
 export type AddressMap = {
   [chainId: number]: string;
 };
@@ -64,3 +67,74 @@ export type LpInfo = {
   routerAddress: string;
   tokenPairName: string;
 };
+
+export const GAS_ESTIMATION_MULTIPLIER = 120;
+export const GAS_ESTIMATION_BASIS = 100;
+
+export interface NativeTransactionProps {
+  chainId: number
+  isCrossChain: boolean
+  outputTokenAddress: string
+  multiChainRouter: MultichainRouter
+  swapAddressSource: string
+  swapArgumentsSource: string
+  swapAddressDest: string
+  swapArgumentsDest: string
+  stargateArgs: IMultichainPortal.StargateArgsStruct
+  amountIn: BigNumber
+  amountInUSDC: BigNumber | '0'
+  layerZeroFeeEstimate: BigNumber
+  account: string
+  calls: ICall[]
+}
+
+export interface ERC20TransactionProps {
+  chainId: number
+  isCrossChain: boolean
+  outputTokenAddress: string
+  multiChainRouter: MultichainRouter
+  swapAddressSource: string
+  swapArgumentsSource: string
+  swapAddressDest: string
+  swapArgumentsDest: string
+  stargateArgs: IMultichainPortal.StargateArgsStruct
+  account: string
+  inputCurrencyAddress: string
+  amountIn: BigNumberish
+  amountInUSDC: BigNumber | '0'
+  layerZeroFeeEstimate: BigNumber
+  calls: ICall[]
+}
+
+export interface ExposedERC20TransactionProps {
+  chainId: number
+  isCrossChain: boolean
+  outputTokenAddress: string
+  swapAddressSource: string
+  swapArgumentsSource: string
+  swapAddressDest: string
+  swapArgumentsDest: string
+  stargateArgs: IMultichainPortal.StargateArgsStruct
+  account: string
+  inputCurrencyAddress: string
+  amountIn: BigNumberish
+  amountInUSDC: BigNumber | '0'
+  layerZeroFeeEstimate: BigNumber
+  calls: ICall[]
+}
+
+export interface ExposedNativeTransactionProps {
+  chainId: number
+  isCrossChain: boolean
+  outputTokenAddress: string
+  swapAddressSource: string
+  swapArgumentsSource: string
+  swapAddressDest: string
+  swapArgumentsDest: string
+  stargateArgs: IMultichainPortal.StargateArgsStruct
+  amountIn: BigNumber
+  amountInUSDC: BigNumber | '0'
+  layerZeroFeeEstimate: BigNumber
+  account: string
+  calls: ICall[]
+}
